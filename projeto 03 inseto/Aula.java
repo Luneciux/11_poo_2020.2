@@ -1,57 +1,80 @@
 import java.util.Scanner;
 
-
-class Mosquito {
+class Inseto {
     int tamanho;
     int energia;
-    Mosquito(int tamanho, int energia){
+
+    //CONSTRUTOR
+    Inseto(int tamanho, int energia){
         this.tamanho = tamanho;
         this.energia = energia;
     }
+
+
+    public String toString() {
+        return "T:" + tamanho + " E:" + energia;        
+    }
 }
 
+//classe do calango da ultima aula
 class Calango {
-    Mosquito barriga;
-    int energia; //atributos
+
+    //barriga do tipo inseto (tamanho do inseto)
+    Inseto barriga;
+
+    int energia;
     int maxEnergia;
     int nPatas;
     int vida;
+
     boolean alive;
 
-    //mesmo nome da classe = sombreamento de variavel
-    Calango(int maxEnergia){ //parametros
+    //CONSTRUTOR
+    Calango(int maxEnergia){
         this.energia = maxEnergia;
         this.maxEnergia = maxEnergia;
         this.nPatas = 4;
         this.vida = 4;
         this.alive = true;
+        this.barriga = null; //BARRIGA COMEÇA SEM NADA
     }
 
-    bool comer(Mosquito mosquito){
+    boolean comer(Inseto mosquito){
         if(this.barriga != null){
             System.out.println("Barriga esta cheia");
             return false;
         }
-        if(mosquito.tamanho > 3){
-            System.out.println("Mosquito muito grande");
+        if(mosquito.tamanho > 4){
+            System.out.println("Inseto muito grande");
             return false;
         }
         barriga = mosquito;
+        return true;
     }
 
-    Mosquito arrotar(){
-        
+    Inseto vomitar(){
+        if(barriga == null){
+            System.out.println("Barriga vazia, nao tem o que por pra fora");
+            return null;
+        }
+        Inseto aux = barriga;
+        barriga = null;
+        return aux;
     }
 
     void digerir(){
-        if(barriga != null)
-        energia += qtd;
+        if(barriga == null){
+            System.out.println("nao tem o que digerir");
+            return;
+        }
+        this.energia += barriga.energia;
         if(energia > maxEnergia){
             energia = maxEnergia;
-            System.out.println("Comi até ficar saciado");
+            System.out.println("Nhame Nhame, estou cheio ate a tampa");
         }else{
-            System.out.println("Tô cheio");
+            System.out.println("Nhame Nhame");
         }
+        barriga = null;
     }
 
     void andar(int dist){
@@ -80,7 +103,7 @@ class Calango {
         }
         if(other.nPatas > 0){
             other.nPatas -= 1;
-            System.out.println("Arranquei uma pata sua com meu Ninjutso");
+            System.out.println("Arranquei uma pata sua com meu Chibancatensei");
         }else{
             System.out.println("Morra com meu golpe do dedo das 4 folhas!!");
             other.alive = false;
@@ -100,31 +123,31 @@ class Calango {
     }
 
     public String toString() {
-        return "energia: " + energia + "/" + maxEnergia + " Patas: " + nPatas  + " Alive:" + alive;
-    }
-
-    public static void main(String[] args) {
-
+        String saida =  "energia: " + energia + "/" + maxEnergia + " Patas: " + nPatas  + " Alive:" + alive;
+        saida += " Barriga: " + barriga;
+        return saida;
     }
 }
 
 
-public class Interativo {
+public class Aula {
     public static void main(String[] args) {
         Calango dead = new Calango(100);
-        Calango pool = new Calango(100);
+        dead.andar(20);
+        Inseto almoco = new Inseto(1, 1);
+        dead.comer(almoco);
         System.out.println(dead);
-        System.out.println(pool);
-
-        dead.brigar(pool);
-        dead.brigar(pool);
-        dead.brigar(pool);
-        dead.brigar(pool);
-        dead.brigar(pool);
-
+        dead.digerir();
         System.out.println(dead);
-        System.out.println(pool);
-        pool.brigar(dead);
-        two = one;
+        Inseto barataVoadora = new Inseto(5, 20);
+        dead.comer(barataVoadora);
+        Inseto meiaBarataVoadora = new Inseto(2, 20);
+        dead.comer(meiaBarataVoadora);
+        System.out.println(dead);
+        Inseto fugiu = dead.vomitar();
+        System.out.println(fugiu);
+        dead.comer(fugiu);
+        dead.digerir();
+        System.out.println(dead);
     }
 }
