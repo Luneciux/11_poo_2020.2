@@ -22,7 +22,7 @@ class Sala{
     public Sala(int tamanho){
         cadeiras = new ArrayList<>();
         Pessoa pessoa = null;
-        Collections.nCopies(tamanho, o)
+        Collections.nCopies(tamanho, o);
         for(int i = 0; i < tamanho; i++){
             cadeiras.add(pessoa);
         }
@@ -46,13 +46,6 @@ class Sala{
         }
         cadeiras.set(index, new Pessoa(id, fone));
     }
-
-    // public void cancelar(String id){
-    //     //se nao encontrar
-
-    //     cadeiras.set(5, null);
-    // }
-
     public void cancelar(String id){
       for(int i = 0; i < cadeiras.size(); i++){
         if(cadeiras.get(i) != null && cadeiras.get(i).id.equal(id)){
@@ -80,10 +73,11 @@ public class Cinema{
     public static void main(String[] args) {
         Sala sala = new Sala(6);
         System.out.println(sala);
+
         sala.reservar("david", "85", -1);
-        sala.reservar("david", "85", 6);
-        sala.reservar("david", "85", 5);
-        sala.reservar("david", "86", 4);
+        sala.reservar("jose", "85", 6);
+        sala.reservar("mateus", "85", 5);
+        sala.reservar("ernandes", "86", 4);
         System.out.println(sala);
         sala.reservar("Josué", "85", 4);
         sala.reservar("Aluizio", "85", 3);

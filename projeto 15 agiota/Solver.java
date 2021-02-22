@@ -39,9 +39,6 @@ class Agiota{
     int nextId;
     TreeMap<Integer, Transaction> transacoes;
 
-    //TreeMap ou HashMap
-    //TreeMap -> Arvore -> Chave Ordenável -> Menos memória -> desempenho pior
-    //HashMap -> Hash -> Chave Hashavel -> Mais memória -> desem melhor
     public Agiota(float balance){
         this.balance = balance;
         this.clientes = new TreeMap<>();
@@ -107,31 +104,16 @@ public class Solver{
         Agiota ag = new Agiota(500);
         ag.addCli("maria", 500);
         ag.addCli("josue", 100);
-        ag.addCli("josua", 600);
-        ag.addCli("josui", 300);
-        ag.addCli("maria", 300); //fail
+        ag.addCli("maria", 300);
 
         ag.lend("maria", 300);
         ag.lend("josue", 50);
         ag.lend("maria", 100);
 
-        System.out.println(ag); //check
+        System.out.println(ag);
 
-        ag.lend("bruno", 30);//fail
-        ag.lend("maria", 60);//fail
-        ag.lend("josue", 30);//fail
-
-        System.out.println(ag); //check
-
-        // ag.receive("maria", 1000);//fail
-        // ag.receive("maria", 350);
-        // ag.receive("josue", 1);
-        // ag.receive("maria", 10);
-
-        // System.out.println(ag); //check
+        System.out.println(ag);
 
         ag.kill("maria");
-
-        // System.out.println(ag); //check
     }
 }
