@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 import java.util.TreeMap;
 
+import javax.management.RuntimeErrorException;
+
 class Pessoa{
     private String nome;
     private boolean meia;
@@ -21,11 +23,53 @@ class Pessoa{
     public String toString() {
         StringBuilder saida = new StringBuilder();
         saida.append("[" + nome + ", ");
-        if(meia == true){
-            saida.append("meia]\n");
-        }else saida.append("inteira]\n");
-
+        saida.append((meia ? "meia" : "inteira") + "\n");
         return saida.toString();
+    }
+}
+
+class DuplicatedKeyException extends RuntimeException{
+
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+    DuplicatedKeyException(String message){
+        super(message);
+    }
+}
+
+class MissingKeyException extends RuntimeException{
+
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+    MissingKeyException(String tipo, String chave){
+        super(tipo + " " + chave + " nao existe no repositorio");
+    }
+}
+
+class Evento{
+    private String nome;
+    private TreeMap<String, Setor> repSetores;
+
+    public Evento(String nome){
+        this.nome = nome;
+    }
+
+    public String getNome(){
+        return this.nome;
+    }
+
+    void addSetor(Setor setor){
+        if(this.repSetores.containsKey(setor.getNome()))
+            throw new DuplicatedKeyException("fail: setor " + setor.getNome() + " ja existente");
+        this.repSetores.put(setor.getNome(), new Setor(setor.getNome(), setor.getPreco(), setor.getCapacidade()));
+    }
+
+    public String toString() {
+        return "[" + nome + "]\n";
     }
 }
 
@@ -76,39 +120,22 @@ class Setor{
         this.capacidade = capacidade;
 }
 
-class Evento{
-    private String nome;
-    private TreeMap<String, Setor> repSetores;
 
-    public Evento(String nome){
-        this.nome = nome;
-    }
-
-    public String getNome(){
-        return this.nome;
-    }
-
-    void addSetor(Setor setor){
-        if(this.repSetores.containsKey(setor.getNome()))
-            System.out.println("fail: setor " + setor.getNome() + " ja existente");
-            return;
-        }
-        this.repSetores.put(setor.getNome(), new Setor(setor.getNome(), setor.getPreco(), setor.getCapacidade()));
-    }
-
-    public String toString() {
-        return "[" + nome + "]\n";
-    }
-
-}
 
 public class Bilheteria{
-    private Arraylist<Venda> repVendas;
+    private ArrayList<Venda> repVendas;
     private TreeMap<String, Pessoa> repPessoas;
     private TreeMap<String, Evento> repEvento;
     private double caixa;
 
-    void vender(String cliente, String evento, String setor){
+    void vender(String cliente, String idEvento, String idSetor){
+        Pessoa pessoa = getPessoa(cliente);
+        Evento evento = getEvento(idEvento);
+        Setor setor = evento.getSetor(idSetor);
+        if(setor.qtd == setor.capacidade)
+            throw new SetorLotadoException();
+        setor.qtd += 1;
+        repVendas.add(new Venda());
 
     }
 
@@ -144,7 +171,33 @@ public class Bilheteria{
 
     }
 
-    void addSetor(String idEvento, String idSetor, double preco, int capacidade){
+    Pessoa getPessoa(String idPessoa){
+        Pessoa pessoa = repPessoas.get(idPessoa);
+        if(pessoa != null)
+            return pessoa;
+        throw new MissingKeyException("Pessoa", idPessoa);
+    }
 
+    Evento getEvento(String idEvento){
+        Evento evento = repEvento.get(idEvento);
+        if(evento != null)
+            return evento;
+        throw new MissingKeyException("Evento", idEvento);
+    }
+
+    void addSetor(String idEvento, String idSetor, double preco, int capacidade){
+        Evento evento = getEvento(idEvento);
+        evento.addSetor(new Setor(idSetor, preco, capacidade));
+
+    }
+
+    public static void main(String[] args) {
+        while(true){
+            try{
+                
+            }catch(RuntimeException e){
+                System.out.println(e);
+            }
+        }
     }
 }
